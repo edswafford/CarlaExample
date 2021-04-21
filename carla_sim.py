@@ -10,6 +10,7 @@ import random
 from pathlib import Path
 import numpy as np
 import pygame
+
 from automated_driving.util.carla_util import carla_vec_to_np_array, carla_img_to_array, CarlaSyncMode, \
     find_weather_presets, draw_image, \
     get_font, should_quit
@@ -126,10 +127,10 @@ def main(use_lane_detector=True, ex=False):
 
             if not ex:
                 ld = LaneDetector(
-                    model_path=Path("lane_detection/best_model_multi_dice_loss.pth").absolute())
-            else:
-                # TODO: Change this line so that it works with your lane detector implementation
-                ld = LaneDetector()
+                    model_path=Path("automated_driving/lane_detection/best_model_multi_dice_loss.pth").absolute())
+            # else:
+            #     # TODO: Change this line so that it works with your lane detector implementation
+            #     ld = LaneDetector()
             # windshield cam
             cam_windshield_transform = carla.Transform(carla.Location(x=0.5, z=cg.height),
                                                        carla.Rotation(pitch=-1 * cg.pitch_deg))
@@ -161,9 +162,9 @@ def main(use_lane_detector=True, ex=False):
                 if use_lane_detector:
                     snapshot, image_rgb, image_windshield = tick_response
                     traj = get_trajectory_from_lane_detector(ld, image_windshield)
-                else:
-                    snapshot, image_rgb = tick_response
-                    traj = get_trajectory_from_map(m, vehicle)
+                # else:
+                #     snapshot, image_rgb = tick_response
+                #     traj = get_trajectory_from_map(m, vehicle)
 
                 # get velocity and angular velocity
                 vel = carla_vec_to_np_array(vehicle.get_velocity())
@@ -226,13 +227,13 @@ def main(use_lane_detector=True, ex=False):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Runs Carla simulation with your control algorithm.')
-    parser.add_argument("--ld", action="store_true", help="Use reference trajectory from your LaneDetector class")
-    parser.add_argument("--ex", action="store_true", help="Run student code")
-    args = parser.parse_args()
+    # parser = argparse.ArgumentParser(description='Runs Carla simulation with your control algorithm.')
+    # parser.add_argument("--ld", action="store_true", help="Use reference trajectory from your LaneDetector class")
+    # parser.add_argument("--ex", action="store_true", help="Run student code")
+    # args = parser.parse_args()
 
     try:
-        main(use_lane_detector=args.ld, ex=args.ex)
+        main(use_lane_detector=True, ex=False)
 
     except KeyboardInterrupt:
         print('\nCancelled by user. Bye!')
